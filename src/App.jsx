@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip, FeatureGroup, GeoJSON} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, FeatureGroup, GeoJSON} from 'react-leaflet';
 import CaliforniaJsonData from "./utils/california-counties.json";
 
 
@@ -14,16 +14,34 @@ function App() {
     setClickedPosition({ lat, lng });
   }
 
-  const cityStyle = {
-    fillColor: 'green', // Change this to the desired color
-    fillOpacity: 0.5,
-    color: 'white',
-    weight: 1,
+  // const cityStyle = {
+  //   fillColor: 'green', // Change this to the desired color
+  //   fillOpacity: 0.5,
+  //   color: 'white',
+  //   weight: 1,
+  // };
+
+
+  // //for tooltip on hover
+  // const onEachCity = (city, layer) => {
+  //   layer.bindPopup(city.properties.name); 
+  //   layer.bindTooltip(
+  //     `<div>
+  //       <div>City: ${city.properties.name}</div>
+  //       <div>Population: ${city.properties.population}</div>
+  //     </div>`, 
+  //     { direction: 'top' }
+  //   ); 
+  // };
+
+  const getRandomColor = () => {
+    const colors = ['red', 'yellow', 'green'];
+    return colors[Math.floor(Math.random() * colors.length)];
   };
 
-
-  //for tooltip on hover
   const onEachCity = (city, layer) => {
+    const cityColor = getRandomColor();
+    layer.setStyle({ fillColor: cityColor , fillOpacity: '0.5', weight:'0.5', color:'blue'}); // Set random color for each city
     layer.bindPopup(city.properties.name); 
     layer.bindTooltip(
       `<div>
@@ -32,7 +50,6 @@ function App() {
       </div>`, 
       { direction: 'top' }
     ); 
-
   };
 
   return (
@@ -52,7 +69,7 @@ function App() {
         {geoJSON && (
           <GeoJSON
             data={geoJSON}
-            style={cityStyle} // Apply style to all cities
+            // style={cityStyle} // Apply style to all cities
             onEachFeature={onEachCity} // Bind popup to each city
           />
         )}
